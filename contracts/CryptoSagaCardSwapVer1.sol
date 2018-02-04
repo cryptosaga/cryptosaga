@@ -41,6 +41,11 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
     public
     returns (uint256)
   {
+    // This is becaue we need to use tx.origin here.
+    // _by should be the beneficiary, but due to the bug that is already exist with CryptoSagaCard.sol,
+    // tx.origin is used instead of _by.
+    require(tx.origin != _by && tx.origin != msg.sender);
+
     var _randomValue = random(100, 0);
     
     // We hard-code this in order to give credential to the players.
@@ -86,7 +91,7 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
       }
     }
     
-    return heroContract.mint(_by, _candidates[random(_count, 0)]);
+    return heroContract.mint(tx.origin, _candidates[random(_count, 0)]);
   }
 
   // @dev return a pseudo random number between lower and upper bounds
