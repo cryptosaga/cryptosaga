@@ -3,9 +3,9 @@ pragma solidity ^0.4.18;
 import "../node_modules/zeppelin-solidity/contracts/ownership/Ownable.sol";
 
 /**
- * @title The swap contract (Card => reward)
- * @dev With this contract, a CryptoSagaCard holder can swap his/her CryptoSagaCard for reward.
- *  This contract is intended to be inherited by CryptoSagaCore later.
+ * @title The interface contract for Card-For-Hero swap functionality.
+ * @dev With this contract, a card holder can swap his/her CryptoSagaCard for reward.
+ *  This contract is intended to be inherited by CryptoSagaCardSwap implementation contracts.
  */
 contract CryptoSagaCardSwap is Ownable {
 
