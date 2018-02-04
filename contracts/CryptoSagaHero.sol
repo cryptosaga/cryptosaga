@@ -260,6 +260,15 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     return tokenIdToHeroInstance[_tokenId].currentStats;
   }
 
+  // @dev Get the hero's BP.
+  function getHeroBP(uint256 _tokenId)
+     public view
+    returns (uint32)
+  {
+    var _tmp = tokenIdToHeroInstance[_tokenId].currentStats;
+    return (_tmp[0] + _tmp[1] + _tmp[2] + _tmp[3] + _tmp[4]);
+  }
+
   // @dev Get the deposit of gold of the player.
   function getGoldDepositOfAddress(address _address)
     public view
