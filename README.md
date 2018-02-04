@@ -1,6 +1,6 @@
 # CryptoSaga
 
-![Banner] (https://cdn-images-1.medium.com/max/800/1*JB01ouLBbrl_tCSrge_FCg.png)
+![Banner](https://cdn-images-1.medium.com/max/800/1*JB01ouLBbrl_tCSrge_FCg.png)
 
 ## Solidity Code
 
