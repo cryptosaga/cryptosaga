@@ -69,7 +69,9 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     // Current stats of this hero. 
     // 0: ATK	1: DEF 2: AGL	3: LUK 4: HP.
     uint32[5] currentStats;
-    // The individual value for this hero's stats. This will affect the current stats of heroes. 
+    // The individual value for this hero's stats. 
+    // This will affect the current stats of heroes.
+    // Intended to be hidden. No Getter for this.
     // 0: ATK	1: DEF 2: AGL	3: LUK 4: HP.
     uint32[5] ivForStats;
   }
@@ -124,14 +126,6 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     uint256 _duration
   );
 
-  // @dev Get the hero class defined of given id.
-  function getHeroClassOfClassId(uint32 _classId)
-    public view
-    returns (HeroClass)
-  {
-    return heroClasses[_classId];
-  }
-
   // @dev Get the class's class name.
   function getHeroClassName(uint32 _classId)
     public view
@@ -180,12 +174,28 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     return heroClasses[_classId].aura;
   }
 
-  // @dev Get the class's initial stats.
-  function getHeroClassStats(uint32 _classId)
+  // @dev Get the class's base stats.
+  function getHeroClassBaseStats(uint32 _classId)
     public view
     returns (uint32[5])
   {
     return heroClasses[_classId].intitialStats;
+  }
+
+  // @dev Get the class's min IVs.
+  function getHeroClassMinIVs(uint32 _classId)
+    public view
+    returns (uint32[5])
+  {
+    return heroClasses[_classId].minIVForStats;
+  }
+
+  // @dev Get the class's max IVs.
+  function getHeroClassMaxIVs(uint32 _classId)
+    public view
+    returns (uint32[5])
+  {
+    return heroClasses[_classId].maxIVForStats;
   }
 
   // @dev Get the heroes ever minted for the class.
@@ -194,14 +204,6 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     returns (uint32)
   {
     return heroClasses[_classId].currentNumberOfInstancedHeroes;
-  }
-
-  // @dev Get the hero's instance.
-  function getHeroInstanceOfTokenId(uint256 _tokenId)
-    public view
-    returns (HeroInstance)
-  {
-    return tokenIdToHeroInstance[_tokenId];
   }
 
   // @dev Get the hero's class id.
