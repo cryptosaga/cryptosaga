@@ -78,11 +78,11 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
 
   // Required exp for level up will increase per level up.
   // This defines how it will increase.
-  uint32 private requiredExpIncreasePerlevel = 100;
+  uint32 public requiredExpIncreasePerlevel = 100;
 
   // Required Gold for level up will increase per level up.
   // This defines how it will increase.
-  uint256 private requiredGoldIncreasePerlevel = 1000000000000000000;
+  uint256 public requiredGoldIncreasePerlevel = 1000000000000000000;
 
   // Existing hero classes.
   mapping(uint32 => HeroClass) public heroClasses;
@@ -93,10 +93,10 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
   // The key is _tokenId.
   mapping(uint256 => HeroInstance) public tokenIdToHeroInstance;
   // The number of tokens ever minted. This works as the serial number.
-  uint256 private numberOfTokenIds;
+  uint256 public numberOfTokenIds;
 
   // Gold contract.
-  Gold private goldContract;
+  Gold public goldContract;
 
   // Deposit of players (in Gold).
   mapping(address => uint256) public addressToGoldDeposit;
@@ -271,6 +271,22 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     return (_tmp[0] + _tmp[1] + _tmp[2] + _tmp[3] + _tmp[4]);
   }
 
+  // @dev Get the hero's required gold for level up.
+  function getHeroRequiredGoldForLevelUp(uint256 _tokenId)
+     public view
+    returns (uint256)
+  {
+    return ((tokenIdToHeroInstance[_tokenId].currentLevel + 2) * requiredGoldIncreasePerlevel);
+  }
+
+  // @dev Get the hero's required exp for level up.
+  function getHeroRequiredExpForLevelUp(uint256 _tokenId)
+     public view
+    returns (uint32)
+  {
+    return ((tokenIdToHeroInstance[_tokenId].currentLevel + 2) * requiredExpIncreasePerlevel);
+  }
+
   // @dev Get the deposit of gold of the player.
   function getGoldDepositOfAddress(address _address)
     public view
@@ -312,7 +328,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
   }
 
   // @dev Set the required golds to level up a hero.
-  function setRequiredGoldIncreasePerlevel(uint32 _value)
+  function setRequiredGoldIncreasePerlevel(uint256 _value)
     onlyOwner
     public
   {
@@ -448,7 +464,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     // Sanity check to ensure we don't overflow.
     require(_newExp == uint256(uint128(_newExp)));
 
-    _heroInstance.currentExp +=_newExp;
+    _heroInstance.currentExp += _newExp;
 
   }
 
@@ -482,13 +498,13 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     require(_heroInstance.currentLevel < _heroClassInfo.maxLevel);
 
     // Required Exp.
-    var requiredExp = (_heroInstance.currentLevel + 1) * requiredExpIncreasePerlevel;
+    var requiredExp = getHeroRequiredExpForLevelUp(_tokenId);
 
     // Need to have enough exp.
     require(_heroInstance.currentExp >= requiredExp);
 
     // Required Gold.
-    var requiredGold = (_heroInstance.currentLevel + 1) * requiredGoldIncreasePerlevel;
+    var requiredGold = getHeroRequiredGoldForLevelUp(_tokenId);
 
     // Owner of token.
     var _ownerOfToken = ownerOf(_tokenId);
@@ -496,8 +512,10 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
     // Need to have enough Gold balance.
     require(addressToGoldDeposit[_ownerOfToken] >= requiredGold);
 
-    // Increase stats.
+    // Increase Level.
     _heroInstance.currentLevel += 1;
+
+    // Increase Stats.
     for (uint8 i = 0; i < 5; i++) {
       _heroInstance.currentStats[i] = _heroClassInfo.intitialStats[i] + (_heroInstance.currentLevel - 1) * _heroInstance.ivForStats[i];
     }
