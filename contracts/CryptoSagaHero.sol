@@ -2,6 +2,7 @@ pragma solidity ^0.4.18;
 
 import "../node_modules/zeppelin-solidity/contracts/token/ERC721/ERC721Token.sol";
 import "../node_modules/zeppelin-solidity/contracts/ownership/Claimable.sol";
+import "../node_modules/zeppelin-solidity/contracts/lifecycle/Pausable.sol";
 
 import "./AccessMint.sol";
 import "./AccessDeploy.sol";
@@ -15,7 +16,7 @@ import "./Gold.sol";
  *  Also a superset of the ERC721 standard that allows for the minting
  *  of the non-fungible tokens.
  */
-contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, AccessDeposit {
+contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessDeploy, AccessDeposit {
 
   string public constant name = "CryptoSaga Hero";
   string public constant symbol = "HERO";
@@ -481,7 +482,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
   // @dev Level up the hero with _tokenId.
   //  This function is called by the owner of the hero.
   function levelUp(uint256 _tokenId)
-    onlyOwnerOf(_tokenId)
+    onlyOwnerOf(_tokenId) whenNotPaused
     public
   {
 
@@ -532,6 +533,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, AccessMint, AccessDeploy, Acc
 
   // @dev Transfer deposit (with the allowance pattern.)
   function transferDeposit(uint256 _amount)
+    whenNotPaused
     public
   {
     require(goldContract.allowance(msg.sender, this) >= _amount);
