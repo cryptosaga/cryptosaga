@@ -15,10 +15,23 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
   // Random seed.
   uint32 private seed = 0;
 
+  // @dev Blacklisted heroes.
+  // This is needed in order to protect players, in case there exists any hero with critical issues.
+  // We promise we will use this function carefully, and this won't be used for balancing the OP heroes.
+  mapping(uint32 => bool) public blackList;
+
+  // @dev Set blacklist.
+  function setBlacklist(uint32 _classId, bool _value)
+    onlyOwner
+    public
+  {
+    blackList[_classId] = _value;
+  }
+
   // @dev Set the address of the contract that represents CryptoSaga Cards.
   function setHeroContract(address _contractAddress)
-    public
     onlyOwner
+    public
   {
     heroContract = CryptoSagaHero(_contractAddress);
   }
@@ -46,6 +59,7 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
     // tx.origin is used instead of _by.
     require(tx.origin != _by && tx.origin != msg.sender);
 
+    // Get value 0 ~ 99.
     var _randomValue = random(100, 0);
     
     // We hard-code this in order to give credential to the players.
@@ -85,7 +99,7 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
     uint32[] memory _candidates = new uint32[](_numberOfClasses);
     uint32 _count;
     for (uint32 i = 0; i < _numberOfClasses; i ++) {
-      if (heroContract.getClassRank(i) == _heroRankToMint) {
+      if (heroContract.getClassRank(i) == _heroRankToMint && blackList[i] != true) {
         _candidates[_count] = i;
         _count++;
       }
