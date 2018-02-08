@@ -24,21 +24,23 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
   struct HeroClass {
     // ex) Soldier, Knight, Fighter...
     string className;
-
     // Race of this class.
     string classRace;
     // How old is this hero class? 
     uint32 classAge;
-    // 0: Common, 1: Uncommon, 2: Rare, 3: Heroic, 4: Legendary
+    // 0: Common, 1: Uncommon, 2: Rare, 3: Heroic, 4: Legendary.
     uint8 classRank;
+    // 0: Fighter, 1: Rogue, 2: Mage.
+    uint8 classType;
+
     // Possible max level of this class.
     uint32 maxLevel; 
     // 0: Water, 1: Fire, 2: Nature, 3: Light, 4: Darkness.
     uint8 aura; 
 
-    // Initial stats of this hero type. 
+    // Base stats of this hero type. 
     // 0: ATK	1: DEF 2: AGL	3: LUK 4: HP.
-    uint32[5] intitialStats;
+    uint32[5] baseStats;
     // Minimum IVs for stats. 
     // 0: ATK	1: DEF 2: AGL	3: LUK 4: HP.
     uint32[5] minIVForStats;
@@ -72,7 +74,6 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     uint32[5] currentStats;
     // The individual value for this hero's stats. 
     // This will affect the current stats of heroes.
-    // Intended to be hidden. No Getter for this.
     // 0: ATK	1: DEF 2: AGL	3: LUK 4: HP.
     uint32[5] ivForStats;
   }
@@ -127,84 +128,48 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     uint256 _duration
   );
 
-  // @dev Get the class's class name.
-  function getHeroClassName(uint32 _classId)
+  // @dev Get the class's entire infomation.
+  function getClassInfo(uint32 _classId)
+    public view
+    returns (string className, string classRace, uint32 classAge, uint8 classRank, uint32 maxLevel, uint8 aura, uint32[5] baseStats, uint32[5] minIVs, uint32[5] maxIVs) 
+  {
+    var _cl = heroClasses[_classId];
+    return (_cl.className, _cl.classRace, _cl.classAge, _cl.classRank, _cl.maxLevel, _cl.aura, _cl.baseStats, _cl.minIVForStats, _cl.maxIVForStats);
+  }
+
+  // @dev Get the class's name.
+  function getClassName(uint32 _classId)
     public view
     returns (string)
   {
     return heroClasses[_classId].className;
   }
 
-  // @dev Get the class's race.
-  function getHeroClassRace(uint32 _classId)
-    public view
-    returns (string)
-  {
-    return heroClasses[_classId].classRace;
-  }
-
-  // @dev Get the class's age.
-  function getHeroClassAge(uint32 _classId)
-    public view
-    returns (uint32)
-  {
-    return heroClasses[_classId].classAge;
-  }
-
   // @dev Get the class's rank.
-  function getHeroClassRank(uint32 _classId)
+  function getClassRank(uint32 _classId)
     public view
     returns (uint8)
   {
     return heroClasses[_classId].classRank;
   }
 
-   // @dev Get the class's max level.
-  function getHeroClassMaxLevel(uint32 _classId)
-    public view
-    returns (uint32)
-  {
-    return heroClasses[_classId].maxLevel;
-  }
-
-  // @dev Get the class's aura.
-  function getHeroClassAura(uint32 _classId)
-    public view
-    returns (uint8)
-  {
-    return heroClasses[_classId].aura;
-  }
-
-  // @dev Get the class's base stats.
-  function getHeroClassBaseStats(uint32 _classId)
-    public view
-    returns (uint32[5])
-  {
-    return heroClasses[_classId].intitialStats;
-  }
-
-  // @dev Get the class's min IVs.
-  function getHeroClassMinIVs(uint32 _classId)
-    public view
-    returns (uint32[5])
-  {
-    return heroClasses[_classId].minIVForStats;
-  }
-
-  // @dev Get the class's max IVs.
-  function getHeroClassMaxIVs(uint32 _classId)
-    public view
-    returns (uint32[5])
-  {
-    return heroClasses[_classId].maxIVForStats;
-  }
-
   // @dev Get the heroes ever minted for the class.
-  function getHeroClassMintCount(uint32 _classId)
+  function getClassMintCount(uint32 _classId)
     public view
     returns (uint32)
   {
     return heroClasses[_classId].currentNumberOfInstancedHeroes;
+  }
+
+  // @dev Get the hero's entire infomation.
+  function getHeroInfo(uint256 _tokenId)
+    public view
+    returns (uint32 classId, string heroName, uint32 currentLevel, uint32 currentExp, uint256 availableAt, uint32[5] currentStats, uint32[5] ivs, uint32 bp)
+  {
+    var _h = tokenIdToHeroInstance[_tokenId];
+    var _stats = _h.currentStats;
+    var _bp = _stats[0] + _stats[1] + _stats[2] + _stats[3] + _stats[4];
+    return (_h.heroClassId, _h.heroName, _h.currentLevel, _h.currentExp, _h.availableAt, _stats, _h.ivForStats, _bp);
   }
 
   // @dev Get the hero's class id.
@@ -231,14 +196,6 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     return tokenIdToHeroInstance[_tokenId].currentLevel;
   }
   
-  // @dev Get the hero's exp.
-  function getHeroExp(uint256 _tokenId)
-    public view
-    returns (uint32)
-  {
-    return tokenIdToHeroInstance[_tokenId].currentExp;
-  }
-
   // @dev Get the hero's location.
   function getHeroLocation(uint256 _tokenId)
     public view
@@ -253,14 +210,6 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     returns (uint256)
   {
     return tokenIdToHeroInstance[_tokenId].availableAt;
-  }
-
-  // @dev Get the hero's current stats.
-  function getHeroStats(uint256 _tokenId)
-    public view
-    returns (uint32[5])
-  {
-    return tokenIdToHeroInstance[_tokenId].currentStats;
   }
 
   // @dev Get the hero's BP.
@@ -345,29 +294,30 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     setGoldContract(_goldAddress);
 
     // Initial heroes.
-    // Name, Max level, Race, Age, Rank, Aura, Stats. 
-    defineType("Archangel", 120, "Celestial", 13540, 4, 3, [uint32(75), 80, 55, 70, 95], [uint32(3), 4, 5, 3, 3], [uint32(6), 4, 8, 5, 5]);
-    defineType("Assassin", 99, "Human", 27, 3, 4, [uint32(50), 35, 65, 55, 55], [uint32(2), 1, 6, 2, 2], [uint32(4), 4, 8, 5, 4]);
-    defineType("Arcane Mage", 99, "Human", 22, 3, 3, [uint32(45), 40, 45, 70, 60], [uint32(3), 2, 4, 2, 2], [uint32(4), 5, 5, 6, 5]);
-
+    // Name, Race, Age, Rank, Type, Max Level, Aura, Stats. 
+    defineType("Archangel", "Celestial", 13540, 4, 0, 120, 3, [uint32(75), 80, 55, 70, 95], [uint32(3), 4, 5, 3, 3], [uint32(6), 4, 8, 5, 5]);
+    defineType("Assassin", "Human", 27, 3, 1, 99, 4, [uint32(50), 35, 65, 55, 55], [uint32(2), 1, 6, 2, 2], [uint32(4), 4, 8, 5, 4]);
   }
 
   // @dev Define a new hero type (class).
-  function defineType(string _className, uint32 _maxLevel, string _classRace, uint32 _classAge, uint8 _classRank, uint8 _aura, uint32[5] _intitialStats, uint32[5] _minIVForStats, uint32[5] _maxIVForStats)
+  function defineType(string _className, string _classRace, uint32 _classAge, uint8 _classRank, uint8 _classType, uint32 _maxLevel, uint8 _aura, uint32[5] _baseStats, uint32[5] _minIVForStats, uint32[5] _maxIVForStats)
     onlyOwner
     public
   {
     require(_classRank < 5);
+    require(_classType < 3);
     require(_aura < 5);
+    require(_minIVForStats[0] <= _maxIVForStats[0] && _minIVForStats[1] <= _maxIVForStats[1] && _minIVForStats[2] <= _maxIVForStats[2] && _minIVForStats[3] <= _maxIVForStats[3] && _minIVForStats[4] <= _maxIVForStats[4]);
 
     var _heroType = HeroClass({
       className: _className,
       classRace: _classRace,
       classAge: _classAge,
       classRank: _classRank,
+      classType: _classType,
       maxLevel: _maxLevel,
       aura: _aura,
-      intitialStats: _intitialStats,
+      baseStats: _baseStats,
       minIVForStats: _minIVForStats,
       maxIVForStats: _maxIVForStats,
       currentNumberOfInstancedHeroes: 0
@@ -390,7 +340,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     public
     returns (uint256)
   {
-    require(_owner != address(0));
+   require(_owner != address(0));
     require(_heroClassId < numberOfHeroClasses);
 
     // The information of the hero's class.
@@ -413,7 +363,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
       currentExp: 0,
       lastLocationId: 0,
       availableAt: now,
-      currentStats: _heroClassInfo.intitialStats,
+      currentStats: _heroClassInfo.baseStats,
       ivForStats: _ivForStats
     });
 
@@ -518,7 +468,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
 
     // Increase Stats.
     for (uint8 i = 0; i < 5; i++) {
-      _heroInstance.currentStats[i] = _heroClassInfo.intitialStats[i] + (_heroInstance.currentLevel - 1) * _heroInstance.ivForStats[i];
+      _heroInstance.currentStats[i] = _heroClassInfo.baseStats[i] + (_heroInstance.currentLevel - 1) * _heroInstance.ivForStats[i];
     }
     
     // Deduct exp.

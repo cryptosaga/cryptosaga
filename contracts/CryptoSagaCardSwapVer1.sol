@@ -85,7 +85,7 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
     uint32[] memory _candidates = new uint32[](_numberOfClasses);
     uint32 _count;
     for (uint32 i = 0; i < _numberOfClasses; i ++) {
-      if (heroContract.getHeroClassRank(i) == _heroRankToMint) {
+      if (heroContract.getClassRank(i) == _heroRankToMint) {
         _candidates[_count] = i;
         _count++;
       }
