@@ -97,13 +97,15 @@ contract CryptoSagaCardSwapVer1 is CryptoSagaCardSwap {
     // Get the list of hero classes.
     uint32 _numberOfClasses = heroContract.numberOfHeroClasses();
     uint32[] memory _candidates = new uint32[](_numberOfClasses);
-    uint32 _count;
+    uint32 _count = 0;
     for (uint32 i = 0; i < _numberOfClasses; i ++) {
       if (heroContract.getClassRank(i) == _heroRankToMint && blackList[i] != true) {
         _candidates[_count] = i;
         _count++;
       }
     }
+
+    require(_count != 0);
     
     return heroContract.mint(tx.origin, _candidates[random(_count, 0)]);
   }

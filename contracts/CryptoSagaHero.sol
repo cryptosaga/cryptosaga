@@ -78,12 +78,12 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     uint32[5] ivForStats;
   }
 
-  // Required exp for level up will increase per level up.
-  // This defines how it will increase.
+  // Required exp for level up will increase when heroes level up.
+  // This defines how the value will increase.
   uint32 public requiredExpIncreaseFactor = 100;
 
-  // Required Gold for level up will increase per level up.
-  // This defines how it will increase.
+  // Required Gold for level up will increase when heroes level up.
+  // This defines how the value will increase.
   uint256 public requiredGoldIncreaseFactor = 1000000000000000000;
 
   // Existing hero classes.
@@ -225,7 +225,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     public view
     returns (uint256)
   {
-    return (2 ** (tokenIdToHeroInstance[_tokenId].currentLevel / 10)) * requiredGoldIncreaseFactor;
+    return (uint256(2) ** (tokenIdToHeroInstance[_tokenId].currentLevel / 10)) * requiredGoldIncreaseFactor;
   }
 
   // @dev Get the hero's required exp for level up.
@@ -403,7 +403,9 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     public
     returns (bool)
   {
-    
+    // The hero should be possessed by anybody.
+    require(ownerOf(_tokenId) != address(0));
+
     var _heroInstance = tokenIdToHeroInstance[_tokenId];
 
     // The character should be avaiable. 
@@ -423,7 +425,9 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     public
     returns (bool)
   {
-    
+    // The hero should be possessed by anybody.
+    require(ownerOf(_tokenId) != address(0));
+
     var _heroInstance = tokenIdToHeroInstance[_tokenId];
 
     var _newExp = _heroInstance.currentExp + _exp;
