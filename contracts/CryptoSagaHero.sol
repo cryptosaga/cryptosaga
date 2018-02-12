@@ -367,8 +367,10 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
 
     // Build random IVs for this hero instance.
     uint32[5] memory _ivForStats;
+    uint32[5] memory _initialStats;
     for (uint8 i = 0; i < 5; i++) {
       _ivForStats[i] = (random(_heroClassInfo.maxIVForStats[i] + 1, _heroClassInfo.minIVForStats[i]));
+      _initialStats[i] = _heroClassInfo.baseStats[i] + _ivForStats[i];
     }
 
     // Temporary hero instance.
@@ -379,7 +381,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
       currentExp: 0,
       lastLocationId: 0,
       availableAt: now,
-      currentStats: _heroClassInfo.baseStats,
+      currentStats: _initialStats,
       ivForStats: _ivForStats
     });
 
