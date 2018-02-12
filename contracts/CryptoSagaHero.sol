@@ -26,7 +26,7 @@ contract CryptoSagaHero is ERC721Token, Claimable, Pausable, AccessMint, AccessD
     string className;
     // 0: Common, 1: Uncommon, 2: Rare, 3: Heroic, 4: Legendary.
     uint8 classRank;
-    // 0: Human, 1: Celestial, 2: Demon, 3: Elf, 4: Dark Elf, 5: Yogoe, 6: Furry, 7: Dragonborn, 8: Undead, 9: Goblin, 10: Troll, and more to come.
+    // 0: Human, 1: Celestial, 2: Demon, 3: Elf, 4: Dark Elf, 5: Yogoe, 6: Furry, 7: Dragonborn, 8: Undead, 9: Goblin, 10: Troll, 11: Slime, and more to come.
     uint8 classRace;
     // How old is this hero class? 
     uint32 classAge;
