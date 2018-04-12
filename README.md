@@ -23,7 +23,15 @@ These are the deployed, verified source of the solidity code.
 
 * Hero: https://etherscan.io/address/0xabc7e6c01237e8eef355bba2bf925a730b714d5f#code
 
-* Summon: https://etherscan.io/address/0x30ed9d2a07f4a79557c8e75ad4d95071a18af0bc#code
+* Fixed Stats for Hero: https://etherscan.io/address/0x1f6f71e1e6a56dc348f1ec9a22b200ac44459fe4#code
+
+* Summon Heroes: https://etherscan.io/address/0x6a5309dc905e85ce88f33bcd4d4d9a03ac68f847#code
+
+* Dungeon: Goblins' mine: https://etherscan.io/address/0xa681aa05399c323442a6622a61717312a879ec25#code
+
+* Dungeon: Sea Cavern: https://etherscan.io/address/0x71bfa06a67ba8bd888d37df09e02b9de7cea6186#code
+
+* Dungeon: Flaming Catacomb:  https://etherscan.io/address/0x84d5c939ddfdc3ea033f03e18213a6906f94e0c3#code
 
 ## Contact
 
