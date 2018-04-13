@@ -31,9 +31,6 @@ contract CryptoSagaCardSwap is Ownable {
   function swapCardForReward(address _by, uint8 _rank)
     onlyCard
     public 
-    returns (uint256)
-  {
-    return 0;
-  }
+    returns (uint256);
 
 }
