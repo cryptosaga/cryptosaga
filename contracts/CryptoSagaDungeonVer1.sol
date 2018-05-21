@@ -9,7 +9,7 @@ import "./CryptoSagaCorrectedHeroStats.sol";
 
 /**
  * @title CryptoSagaDungeonVer1
- * @dev The actual gameplay is done by this contract.
+ * @dev The actual gameplay is done by this contract. Version 1.0.1.
  */
 contract CryptoSagaDungeonVer1 is Claimable, Pausable {
 
@@ -616,15 +616,15 @@ contract CryptoSagaDungeonVer1 is Claimable, Pausable {
       // In case lost.
       // Give baseline gold reward.
       _goldRewardGiven = goldReward / 25 * sqrt(_progress);
-      _expRewardGiven = expReward * _numberOfKilledEnemies / 4 / 5;
+      _expRewardGiven = expReward * _numberOfKilledEnemies / 4 / 5 * sqrt(_progress / 4 + 1);
     } else if (_isClearedBefore == true) {
       // Did win, but this progress has been already cleared before.
       _goldRewardGiven = goldReward / 5 * sqrt(_progress);
-      _expRewardGiven = expReward / 5;
+      _expRewardGiven = expReward / 5 * sqrt(_progress / 4 + 1);
     } else {
       // Firstly cleared the progress.
       _goldRewardGiven = goldReward * sqrt(_progress);
-      _expRewardGiven = expReward;
+      _expRewardGiven = expReward * sqrt(_progress / 4 + 1);
     }
 
     // Give reward Gold.
