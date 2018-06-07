@@ -197,10 +197,10 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
     PlayRecord memory _playRecord;
     _playRecord.initialSeed = seed;
     _playRecord.enemyAddress = _firstPlayerAddress;
-    _playRecord.tokenIds[0] = 0;
-    _playRecord.tokenIds[1] = 1;
-    _playRecord.tokenIds[2] = 2;
-    _playRecord.tokenIds[3] = 3;
+    _playRecord.tokenIds[0] = 1;
+    _playRecord.tokenIds[1] = 2;
+    _playRecord.tokenIds[2] = 3;
+    _playRecord.tokenIds[3] = 4;
     addressToPlayRecord[_firstPlayerAddress] = _playRecord;
     
     locationId = _locationId;
@@ -423,9 +423,18 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
     if (_tokenIds[3] != 0)
       heroContract.deploy(_tokenIds[3], locationId, coolHero);
 
+    uint8 _deadHeroes = 0;
     uint8 _deadEnemies = 0;
 
     // Check result.
+    if (_unitStats[0][4] == 0)
+      _deadHeroes ++;
+    if (_unitStats[1][4] == 0)
+      _deadHeroes ++;
+    if (_unitStats[2][4] == 0)
+      _deadHeroes ++;
+    if (_unitStats[3][4] == 0)
+      _deadHeroes ++;
     if (_unitStats[4][4] == 0)
       _deadEnemies ++;
     if (_unitStats[5][4] == 0)
@@ -435,7 +444,7 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
     if (_unitStats[7][4] == 0)
       _deadEnemies ++;
       
-    if (_deadEnemies == 4) {
+    if (_deadEnemies > _deadHeroes) { // Win
       // Fire TryArena event.
       TryArena(msg.sender, _enemyAddress, true);
       
@@ -445,7 +454,7 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
       // Save the record.
       recordContract.updateRecord(msg.sender, _enemyAddress, true);
     }
-    else {
+    else if (_deadEnemies < _deadHeroes) { // Lose
       // Fire TryArena event.
       TryArena(msg.sender, _enemyAddress, false);
 
@@ -454,6 +463,13 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
 
       // Save the record.
       recordContract.updateRecord(msg.sender, _enemyAddress, false);
+    }
+    else { // Draw
+      // Fire TryArena event.
+      TryArena(msg.sender, _enemyAddress, false);
+
+      // Rewards.
+      (_playRecord.expReward, _playRecord.goldReward) = giveReward(_tokenIds, false, _turnInfo.originalExps);
     }
 
     // Save the result of this gameplay.
