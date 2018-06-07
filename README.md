@@ -27,11 +27,17 @@ These are the deployed, verified source of the solidity code.
 
 * Summon Heroes: https://etherscan.io/address/0x6a5309dc905e85ce88f33bcd4d4d9a03ac68f847#code
 
-* Dungeon: Goblins' mine: https://etherscan.io/address/0xa681aa05399c323442a6622a61717312a879ec25#code
+* Dungeon: Goblins' mine: https://etherscan.io/address/0x7e8a2e5876453ea41936c64678de81ae40522bb3#code
 
-* Dungeon: Sea Cavern: https://etherscan.io/address/0x71bfa06a67ba8bd888d37df09e02b9de7cea6186#code
+* Dungeon: Sea Cavern: https://etherscan.io/address/0x2dad7bc882ac14736bd167a220aa575e65a1a5b2#code
 
-* Dungeon: Flaming Catacomb:  https://etherscan.io/address/0x84d5c939ddfdc3ea033f03e18213a6906f94e0c3#code
+* Dungeon: Flaming Catacomb:  https://etherscan.io/address/0xc00cc67677b7d54c6d5a4bc6e72ae4822d3e70fd#code
+
+* Dungeon: Ruins of the Empire:  https://etherscan.io/address/0x4D3C07F06FC3dE2f3B807F8e242b91b71933a560#code
+
+* Arena Record System: https://etherscan.io/address/0x67e72299beaf3f59f365bb4a43e8d02bff61e176
+
+* Arena First: https://etherscan.io/address/0x6403670a03596ca2316b84595bce37d5313a2ec4
 
 ## Contact
 
