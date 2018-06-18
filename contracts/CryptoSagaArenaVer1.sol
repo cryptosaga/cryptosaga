@@ -9,7 +9,7 @@ import "./CryptoSagaCorrectedHeroStats.sol";
 
 /**
  * @title CryptoSagaArenaVer1
- * @dev The actual gameplay is done by this contract. Version 1.0.0.
+ * @dev The actual gameplay is done by this contract. Version 1.0.1.
  */
 contract CryptoSagaArenaVer1 is Claimable, Pausable {
 
@@ -169,6 +169,14 @@ contract CryptoSagaArenaVer1 is Claimable, Pausable {
     public
   {
     isTurnDataSaved = _value;
+  }
+
+  // @dev Set Record Contract.
+  function setRecordContract(address _address)
+    onlyOwner
+    public
+  {
+    recordContract = CryptoSagaArenaRecord(_address);
   }
 
   // @dev Constructor.

@@ -86,7 +86,7 @@ contract CryptoSagaArenaRecord is Pausable, AccessDeploy {
   // @dev Constructor.
   function CryptoSagaArenaRecord(
     address _firstPlayerAddress,
-    uint32 _firstPlayerElo, 
+    address _previousSeasonRecord,
     uint8 _numberOfLeaderboardPlayers, 
     uint8 _numberOfRecentPlayers)
     public
@@ -103,7 +103,16 @@ contract CryptoSagaArenaRecord is Pausable, AccessDeploy {
     pushPlayer(_firstPlayerAddress);
     
     // The initial player's Elo.
-    addressToElo[_firstPlayerAddress] = _firstPlayerElo;
+    addressToElo[_firstPlayerAddress] = 1500;
+
+    // Get instance of previous season.
+    CryptoSagaArenaRecord _previous = CryptoSagaArenaRecord(_previousSeasonRecord);
+
+    for (uint256 i = _previous.recentPlayersFront(); i < _previous.recentPlayersBack(); i++) {
+      var _player = _previous.recentPlayers(i);
+      // The initial player's Elo.
+      addressToElo[_player] = _previous.getEloRating(_player);
+    }
   }
 
   // @dev Update record.
@@ -204,9 +213,9 @@ contract CryptoSagaArenaRecord is Pausable, AccessDeploy {
 
         // Second, if the minimum elo value is smaller than the player's elo value, then replace the entity.
         if (_minimumElo <= addressToElo[_addressToUpdate]) {
+          addressToIsInLeaderboard[leaderBoardPlayers[_minimumEloPlayerIndex]] = false;
           leaderBoardPlayers[_minimumEloPlayerIndex] = _addressToUpdate;
           addressToIsInLeaderboard[_addressToUpdate] = true;
-          addressToIsInLeaderboard[leaderBoardPlayers[_minimumEloPlayerIndex]] = false;
           isChanged = true;
         }
       } else {
