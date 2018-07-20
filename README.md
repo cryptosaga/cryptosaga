@@ -35,9 +35,9 @@ These are the deployed, verified source of the solidity code.
 
 * Dungeon: Ruins of the Empire:  https://etherscan.io/address/0x4D3C07F06FC3dE2f3B807F8e242b91b71933a560#code
 
-* Arena Record System: https://etherscan.io/address/0xfdbfe77f588cb4839193dddd9c47d9983991e108
+* Arena Record System: https://etherscan.io/address/0x951a2a90a2384ae86c1ed822e468c35912ce0721
 
-* Arena First: https://etherscan.io/address/0x9d7db617fbf50ae4860d3f8a5383149656778a6e
+* Arena: https://etherscan.io/address/0x8095ff4eea862eefead05b68a2f75f3aef7b81d0
 
 ## Contact
 
