@@ -35,6 +35,10 @@ These are the deployed, verified source of the solidity code.
 
 * Dungeon: Ruins of the Empire:  https://etherscan.io/address/0x4D3C07F06FC3dE2f3B807F8e242b91b71933a560#code
 
+* Dungeon: Pandemonium: https://etherscan.io/address/0xc7251934aafcfadc52fe5804ea4eda1972e43d15#code
+
+* Dungeon: The Tower: https://etherscan.io/address/0x0c69ea8a12c6ca8acc500751251e2ea9440e73df#code
+
 * Arena Record System: https://etherscan.io/address/0x951a2a90a2384ae86c1ed822e468c35912ce0721
 
 * Arena: https://etherscan.io/address/0x8095ff4eea862eefead05b68a2f75f3aef7b81d0
