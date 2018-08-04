@@ -25,7 +25,7 @@ These are the deployed, verified source of the solidity code.
 
 * Fixed Stats for Hero: https://etherscan.io/address/0x1f6f71e1e6a56dc348f1ec9a22b200ac44459fe4#code
 
-* Summon Heroes: https://etherscan.io/address/0x6a5309dc905e85ce88f33bcd4d4d9a03ac68f847#code
+* Summon Heroes: https://etherscan.io/address/0xCc862f25B2F725C0666D67774c47c63c9A3af150#code
 
 * Dungeon: Goblins' mine: https://etherscan.io/address/0x7e8a2e5876453ea41936c64678de81ae40522bb3#code
 

@@ -8,7 +8,7 @@ import "./Gold.sol";
 
 /**
  * @title CryptoSagaCardSwapVer2
- * @dev This directly summons hero.
+ * @dev This directly summons hero. Version 1.0.1
  */
 contract CryptoSagaCardSwapVer2 is CryptoSagaCardSwap, Pausable{
 
@@ -344,8 +344,8 @@ contract CryptoSagaCardSwapVer2 is CryptoSagaCardSwap, Pausable{
     returns (uint32)
   {
     require(_upper > _lower);
-
-    seed = uint32(keccak256(keccak256(block.blockhash(block.number), seed), now));
+    
+    seed = uint32(keccak256(keccak256(block.blockhash(block.number - 1), seed), now));
     return seed % (_upper - _lower) + _lower;
   }
 
